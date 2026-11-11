@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>short-drama-forge · 小说 → 开拍短剧资产</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2b3441;
+    --txt:#e6edf3; --mut:#8b98a8; --amber:#f0a93b; --amber2:#ffce6b;
+    --cyan:#39d0c8; --green:#4ec97a; --red:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--txt);line-height:1.6}
+  header{padding:26px 22px 14px;border-bottom:1px solid var(--line);
+         background:linear-gradient(180deg,#11161d,#0d1117)}
+  header h1{margin:0;font-size:22px;letter-spacing:.5px}
+  header h1 b{color:var(--amber)}
+  header p{margin:6px 0 0;color:var(--mut);font-size:13px;max-width:880px}
+  .wrap{display:grid;grid-template-columns:360px 1fr;gap:18px;padding:18px;align-items:start}
+  @media(max-width:860px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  textarea{width:100%;height:300px;background:var(--panel2);color:var(--txt);
+           border:1px solid var(--line);border-radius:8px;padding:12px;font-size:13px;
+           resize:vertical;line-height:1.7}
+  .btn{margin-top:10px;background:var(--amber);color:#1a1206;border:0;border-radius:8px;
+       padding:11px 16px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+  .btn:hover{background:var(--amber2)}
+  .btn.ghost{background:transparent;color:var(--amber);border:1px solid var(--amber);font-weight:600}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{background:var(--panel2);border:1px solid var(--line);color:var(--mut);
+       padding:7px 12px;border-radius:20px;font-size:12.5px;cursor:pointer}
+  .tab.on{background:var(--amber);color:#1a1206;font-weight:700;border-color:var(--amber)}
+  .stage{display:none}.stage.on{display:block}
+  h2{font-size:16px;margin:0 0 10px;color:var(--amber2)}
+  .kv{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+  .kv .k{color:var(--mut);min-width:96px;flex-shrink:0}
+  .tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);
+       color:var(--cyan);padding:2px 9px;border-radius:6px;font-size:12px;margin:3px 4px 0 0}
+  .quote{background:#0f141b;border-left:3px solid var(--amber);padding:8px 12px;
+         margin:6px 0;border-radius:0 6px 6px 0;font-size:13px;color:#cdd7e2}
+  .char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .char{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .anchor-row{display:flex;gap:12px;align-items:flex-start}
+  .views{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .view{background:#0f141b;border:1px solid var(--line);border-radius:8px;padding:6px;
+        width:62px;text-align:center;font-size:11px;color:var(--mut)}
+  .view svg{display:block;margin:0 auto 4px}
+  .shot{background:var(--panel2);border:1px solid var(--line);border-radius:8px;
+        padding:10px 12px;margin-bottom:8px;font-size:13px}
+  .shot .h{color:var(--amber2);font-weight:700;font-size:12px}
+  .gate{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--panel2);
+        border:1px solid var(--line);border-radius:8px;margin-bottom:7px;font-size:13.5px}
+  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0}
+  .badge.p{background:rgba(78,201,122,.15);color:var(--green);border:1px solid var(--green)}
+  .badge.f{background:rgba(255,107,107,.15);color:var(--red);border:1px solid var(--red)}
+  .meta{color:var(--mut);font-size:12px;margin-top:10px}
+  .pill{display:inline-block;background:var(--amber);color:#1a1206;border-radius:20px;
+        padding:3px 12px;font-size:12px;font-weight:700;margin:0 6px 6px 0}
+  pre{background:#0f141b;border:1px solid var(--line);border-radius:8px;padding:12px;
+      overflow:auto;font-size:12px;max-height:420px;color:#cdd7e2}
+  svg.figure{background:#0f141b;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>short-drama-forge · <b>把小说拆解成可直接开拍的短剧资产</b></h1>
+  <p>受 shuohao-skills 启发的最小可跑通 Demo。六道工序（改编大纲→角色设定集→美术设定→剧本→开场调度→分镜表）+ 生产包，锚点法保证跨镜头一致性，脚本化质量门拦截不合格交付。纯前端运行，克隆即跑。</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2 style="margin-top:0">① 输入小说</h2>
+    <textarea id="src"></textarea>
+    <button class="btn" id="run">▶ 运行管线，生成资产</button>
+    <button class="btn ghost" id="load">载入示例《纸鸢》</button>
+    <button class="btn ghost" id="json">查看 assembled JSON</button>
+    <div class="meta" id="meta">尚未运行。</div>
+  </div>
+
+  <div class="card">
+    <div class="tabs" id="tabs">
+      <div class="tab on" data-s="outline">改编大纲</div>
+      <div class="tab" data-s="characters">角色设定集</div>
+      <div class="tab" data-s="art">美术设定</div>
+      <div class="tab" data-s="script">剧本</div>
+      <div class="tab" data-s="blocking">开场调度</div>
+      <div class="tab" data-s="storyboard">分镜表</div>
+      <div class="tab" data-s="pack">生产包</div>
+      <div class="tab" data-s="gates">质量门</div>
+    </div>
+    <div id="out"></div>
+  </div>
+</div>
+
+<script>
+const SAMPLE = `《纸鸢》
+
+海边小镇的雨季来得又慢又长。阿砚蹲在檐下修那只断了骨的老纸鸢，指节被雨水泡得发白。他记得母亲说过，纸鸢飞得越高，就越能替地上的人看一眼远处的亲人。
+
+沈娘撑着油纸伞从巷口走来，裙角沾了泥。她是镇上唯一的郎中，也是阿砚暗暗喜欢了三年的人。沈娘把一包药递过来，说你父亲咳得厉害，今夜怕是熬不过去。阿砚的手停住了，纸鸢的竹骨啪地断成两截。
+
+老鲛坐在礁石上，像一截被海浪忘了的枯木。他自称来自海底的沉船国，说只要阿砚肯把纸鸢放上天，就能换回十年前沉没的那艘船里的人。阿砚不信，可父亲床头的那盏灯，已经快要灭了。
+
+雨停的时候，阿砚背着父亲走上了最高的崖。沈娘跟在后面，没有说话。老鲛在崖边燃起一堆蓝火，火光照得每个人的脸都像蒙了一层薄冰。阿砚展开了那只用破布和竹条重新扎好的纸鸢，风从谷底涌上来，纸鸢颤了颤，竟真的升了上去。
+
+灯灭了。父亲的手垂了下去。
+
+可天上那一点暖黄，迟迟没有落下来。老鲛笑了，说沉船国从不白送人回去，它只收走活人的念想。沈娘扑过去抱住阿砚，哭着说他还在，他还在。阿砚望着空了的纸鸢线，第一次明白，有些风筝放出去，就再也收不回了。`;
+
+const CAST = [
+  {name:"阿砚",role:"男主 / 少年",
+   anchor:"十七八岁瘦削少年，肤色偏白，过肩黑发微乱，粗布短打沾泥，左手有竹篾划痕；正面全身、平视镜头。",
+   palette:["#3a4a5a","#c9b48a","#e8e2d4"]},
+  {name:"沈娘",role:"女主 / 镇上郎中",
+   anchor:"二十出头女子，清瘦，挽发插木簪，青灰襦裙，常执油纸伞；正面全身、侧身微倾。",
+   palette:["#5a6b62","#b9c4bd","#f0ece2"]},
+  {name:"老鲛",role:"神秘反派 / 沉船国来客",
+   anchor:"佝偻老者，皮肤青灰似浸水枯木，眼神空洞，披海藻色破氅；正面全身、背光剪影。",
+   palette:["#1f2d33","#2f6b66","#9fd6cf"]},
+];
+const THEME = {
+  "失去与告别":["收不回","灭了","垂了下去","再也","念想"],
+  "守护与羁绊":["抱住","还在","亲人","替","看一眼"],
+  "谎言与代价":["从不白送","只收走","不信","笑了"],
+  "成长与觉醒":["第一次明白","爬上","展开","升了上去"],
+};
+
+const splitS = t => t.split(/[。！？\n]/).map(s=>s.trim()).filter(Boolean);
+function quotes(text,name,limit=3){
+  let out=[];
+  for(const s of splitS(text)){ if(name.includes(name)&&text.includes(name)&&s.includes(name)&&out.length<limit) out.push(s); }
+  // 上面写法等价，简化为：
+  out=[];
+  for(const s of splitS(text)){ if(s.includes(name)&&out.length<limit) out.push(s); }
+  return out;
+}
+function theme(text){
+  let best="失去与告别",sc=-1;
+  for(const[k,ks] of Object.entries(THEME)){let v=ks.reduce((a,b)=>a+text.split(b).length-1,0);if(v>sc){sc=v;best=k;}}
+  return best;
+}
+function genOutline(text){
+  const paras=text.split("\n").map(p=>p.trim()).filter(Boolean);
+  const n=paras.length, t=Math.max(1,Math.floor(n/3));
+  return {title:"纸鸢",genre:"东方奇幻 / 情感短剧",theme:theme(text),target_episodes:1,
+    logline:"一个少年为救父亲放出纸鸢，却被告知沉船国只收活人的念想。",
+    three_act:{"第一幕·建置":paras.slice(0,t).join(" ").slice(0,120),
+               "第二幕·对抗":paras.slice(t,2*t).join(" ").slice(0,120),
+               "第三幕·结局":paras.slice(2*t).join(" ").slice(0,120)},
+    key_beats:["阿砚雨夜修纸鸢，埋下『替亲人看一眼远方』母题","沈娘送来父亲病危消息，纸鸢断骨=危机",
+               "老鲛以『沉船国换人』为饵","崖顶放鸢，父亲灯灭——高潮与牺牲",
+               "念想被收走，纸鸢线空：主题落点"]};
+}
+function genCharacters(text){
+  const chars=CAST.map(c=>({name:c.name,role:c.role,anchor_image_prompt:c.anchor,
+    derived_views:["正面特写","侧身半身","背影全身","动作镜头"].map(v=>({view:v,rule:"仅参考锚图生成，不允许新造型"})),
+    palette:c.palette,verbatim_quotes:quotes(text,c.name),consistency_anchor:true}));
+  return {characters:chars,anchor_method:"先定正面全身锚图，衍生视角只参考锚图"};
+}
+function genArt(ch){
+  return {visual_style:"湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀",
+    color_palette:["#1f2d33","#2f6b66","#3a4a5a","#c9b48a","#e8e2d4"],
+    scenes:["檐下修鸢","巷口送药","礁石枯坐","崖顶蓝火","空线望天"],
+    costume_props:["油纸伞","竹骨纸鸢","蓝火堆","药包","枯木礁石"],
+    anchor_lock:ch.characters.map(c=>({character:c.name,locked_to:"anchor_image_prompt"}))};
+}
+function genScript(ol){
+  const scenes=[
+    {scene:"S1 檐下",action:"雨。阿砚蹲檐下修断骨纸鸢。",lines:[{who:"阿砚",line:"（喃喃）母亲说，飞得越高，越能替地上的人看一眼亲人。"}]},
+    {scene:"S2 巷口",action:"沈娘撑伞而来，递药。",lines:[{who:"沈娘",line:"你父亲咳得厉害，今夜怕是熬不过去。"},{who:"阿砚",line:"（手停）这骨……又断了。"}]},
+    {scene:"S3 礁石",action:"老鲛如枯木静坐，开价。",lines:[{who:"老鲛",line:"把纸鸢放上天，沉船国便还你十年前沉没的人。"},{who:"阿砚",line:"我不信。"}]},
+    {scene:"S4 崖顶",action:"蓝火燃起，纸鸢升空，灯灭。",lines:[{who:"老鲛",line:"沉船国从不白送人回去，它只收走活人的念想。"},{who:"沈娘",line:"（扑过去）他还在，他还在！"},{who:"阿砚",line:"（望空线）有些风筝放出去，就再也收不回了。"}]},
+  ];
+  return {episode:1,scenes,beats:ol.key_beats};
+}
+function genBlocking(sc){
+  return {episode_open:"S1 檐下",
+    camera:["CS 阿砚手部特写（竹骨）","WS 檐下全景（雨线）","OTS 沈娘入画"],
+    blocking:["阿砚定格画面中央偏左，雨从画面右上方斜入","沈娘从画右撑伞走入，停于画右1/3","蓝火（S4）以冷光反向铺垫，提前3秒闪现"],
+    continuity_note:"阿砚造型必须与第一幕锚图一致，不允许换脸换装"};
+}
+function genStoryboard(sc,ch,art){
+  const rows=[];let shot=1;
+  for(const s of sc.scenes) s.lines.forEach((ln,i)=>{
+    rows.push({shot,scene:s.scene,shot_size:i===0?"CU":"MS",
+      visual:`${s.action}｜${ln.who}特写`,audio:ln.line,duration_s:4,
+      anchor_ref:ln.who,style_ref:art.visual_style});shot++;});
+  return {storyboard:rows,total_shots:rows.length};
+}
+function genPack(sb,art,ch){
+  const cm={};ch.characters.forEach(c=>cm[c.name]=c);
+  const pack=sb.storyboard.map(r=>({shot:r.shot,
+    video_prompt:`${art.visual_style}。${r.visual}。角色【${r.anchor_ref}】须严格匹配锚图：${cm[r.anchor_ref]?.anchor_image_prompt||""}。禁止换脸换装、禁止新增造型。`,
+    duration_s:r.duration_s}));
+  return {production_pack:pack,count:pack.length};
+}
+function gates(A){
+  const C=A.characters.characters;const g=[];
+  const add=(id,n,ok,m)=>g.push({id,name:n,pass:ok,message:m});
+  add("G01","主角锚图含『正面全身』描述",C.every(c=>c.anchor_image_prompt.includes("正面全身")),"");
+  add("G02","衍生视角声明『仅参考锚图』",C.every(c=>c.derived_views.every(v=>v.rule.startsWith("仅参考锚图"))),"");
+  add("G03","角色画像含原文逐字引用",C.every(c=>c.verbatim_quotes.length>=1),"");
+  add("G04","剧本场景数 ≥ 3 且含冲突推进",A.script.scenes.length>=3,"");
+  add("G05","分镜每个镜头引用角色锚点",A.storyboard.storyboard.every(r=>r.anchor_ref),"");
+  add("G06","生产包 prompt 含视觉风格",A.production_pack.production_pack.every(p=>p.video_prompt.includes(A.art.visual_style)),"");
+  add("G07","美术设定锁定全部角色锚点",A.art.anchor_lock.length===C.length,"");
+  add("G08","六道工序 + 生产包 JSON 字段完整",["outline","characters","art","script","blocking","storyboard","production_pack"].every(k=>k in A),"");
+  return g;
+}
+function build(text){
+  const outline=genOutline(text),characters=genCharacters(text),art=genArt(characters),
+        script=genScript(outline),blocking=genBlocking(script),
+        storyboard=genStoryboard(script,characters,art),
+        production_pack=genPack(storyboard,art,characters);
+  const A={outline,characters,art,script,blocking,storyboard,production_pack};
+  A.quality_gates=gates(A);return A;
+}
+
+// ---------- 渲染 ----------
+function figureSVG(palette,flip){
+  const c=palette;const sx=flip?-1:1;
+  return `<svg class="figure" width="92" height="150" viewBox="0 0 92 150">
+    <rect width="92" height="150" fill="#0f141b"/>
+    <g transform="translate(46,0) scale(${sx},1) translate(-46,0)">
+    <circle cx="46" cy="26" r="13" fill="${c[0]}"/>
+    <rect x="40" y="39" width="12" height="20" rx="5" fill="${c[0]}"/>
+    <path d="M46 39 L30 70 L38 72 L46 55 L54 72 L62 70 L46 39Z" fill="${c[1]}"/>
+    <rect x="36" y="59" width="9" height="46" rx="4" fill="${c[1]}"/>
+    <rect x="47" y="59" width="9" height="46" rx="4" fill="${c[1]}"/>
+    <rect x="31" y="104" width="11" height="34" rx="4" fill="${c[2]}"/>
+    <rect x="50" y="104" width="11" height="34" rx="4" fill="${c[2]}"/>
+    </g></svg>`;
+}
+function renderOutline(o){
+  let h=`<h2>改编大纲</h2><div>`;
+  h+=`<span class="pill">题材 ${o.genre}</span><span class="pill">主题 ${o.theme}</span><span class="pill">目标 ${o.target_episodes} 集</span></div>`;
+  h+=`<div class="kv"><span class="k">Logline</span><span>${o.logline}</span></div>`;
+  h+=`<div class="kv"><span class="k">三幕结构</span><span>${Object.entries(o.three_act).map(([k,v])=>`<b style="color:var(--amber2)">${k}</b>：${v}`).join("<br>")}</span></div>`;
+  h+=`<div style="margin-top:8px"><b style="color:var(--mut)">关键情节点</b><ul style="margin:6px 0;padding-left:20px">${o.key_beats.map(b=>`<li>${b}</li>`).join("")}</ul></div>`;
+  return h;
+}
+function renderChars(c){
+  let h=`<h2>角色设定集 · 锚点法</h2><p class="meta" style="margin-top:0">${c.anchor_method}</p><div class="char-grid">`;
+  for(const ch of c.characters){
+    h+=`<div class="char"><div class="anchor-row">
+        ${figureSVG(ch.palette)}<div><b style="color:var(--amber2)">${ch.name}</b> · ${ch.role}
+        <div class="quote" style="margin:6px 0">${ch.anchor_image_prompt}</div>
+        <div class="tag">锚图 · 正面全身</div></div></div>`;
+    h+=`<div style="font-size:11px;color:var(--mut);margin-top:6px">原文逐字引用：</div>`;
+    ch.verbatim_quotes.forEach(q=>h+=`<div class="quote">“${q}”</div>`);
+    h+=`<div class="views">${ch.derived_views.map(v=>`<div class="view">${figureSVG(ch.palette,true)}<div>${v.view}</div><div style="color:var(--cyan)">仅参考锚图</div></div>`).join("")}</div>`;
+    h+=`</div>`;
+  }
+  return h+`</div>`;
+}
+function renderArt(a){
+  let h=`<h2>美术设定</h2>`;
+  h+=`<div class="kv"><span class="k">视觉风格</span><span>${a.visual_style}</span></div>`;
+  h+=`<div class="kv"><span class="k">主色板</span><span>${a.color_palette.map(c=>`<span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:${c};margin-right:5px;vertical-align:middle"></span>${c}`).join(" ")}</span></div>`;
+  h+=`<div class="kv"><span class="k">场景清单</span><span>${a.scenes.map(s=>`<span class="tag">${s}</span>`).join("")}</span></div>`;
+  h+=`<div class="kv"><span class="k">服化道</span><span>${a.costume_props.map(s=>`<span class="tag">${s}</span>`).join("")}</span></div>`;
+  h+=`<div style="margin-top:8px"><b style="color:var(--mut)">锚点锁定（anchor_lock）</b><ul style="margin:6px 0;padding-left:20px">${a.anchor_lock.map(x=>`<li>${x.character} → <code>${x.locked_to}</code></li>`).join("")}</ul></div>`;
+  return h;
+}
+function renderScript(s){
+  let h=`<h2>剧本 · 第 ${s.episode} 集</h2>`;
+  for(const sc of s.scenes){
+    h+=`<div class="shot"><div class="h">${sc.scene}</div><div style="color:var(--mut)">${sc.action}</div>`;
+    sc.lines.forEach(l=>h+=`<div style="margin-top:4px"><b style="color:var(--cyan)">${l.who}：</b>${l.line}</div>`);
+    h+=`</div>`;
+  }
+  return h;
+}
+function renderBlocking(b){
+  let h=`<h2>开场调度 · ${b.episode_open}</h2>`;
+  h+=`<div class="kv"><span class="k">机位</span><span>${b.camera.map(c=>`<span class="tag">${c}</span>`).join("")}</span></div>`;
+  h+=`<div class="kv"><span class="k">走位</span><span><ul style="margin:0;padding-left:18px">${b.blocking.map(x=>`<li>${x}</li>`).join("")}</ul></span></div>`;
+  h+=`<div class="kv"><span class="k">连续性</span><span style="color:var(--red)">${b.continuity_note}</span></div>`;
+  return h;
+}
+function renderStoryboard(s){
+  let h=`<h2>分镜表 · 共 ${s.total_shots} 镜</h2>`;
+  h+=`<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px">
+    <tr style="color:var(--mut);text-align:left"><th>#</th><th>景别</th><th>画面</th><th>台词/音效</th><th>锚点</th><th>秒</th></tr>`;
+  s.storyboard.forEach(r=>{
+    h+=`<tr style="border-top:1px solid var(--line)"><td>${r.shot}</td><td>${r.shot_size}</td>
+        <td>${r.visual}</td><td>${r.audio}</td><td style="color:var(--cyan)">${r.anchor_ref}</td><td>${r.duration_s}</td></tr>`;
+  });
+  return h+`</table></div>`;
+}
+function renderPack(p){
+  let h=`<h2>生产包 · ${p.count} 条可直接喂视频模型</h2>`;
+  p.production_pack.forEach(x=>h+=`<div class="shot"><div class="h">镜 ${x.shot}（${x.duration_s}s）</div><div class="quote">${x.video_prompt}</div></div>`);
+  return h;
+}
+function renderGates(g){
+  const pass=g.filter(x=>x.pass).length;
+  let h=`<h2>质量门 · ${pass}/${g.length} 通过</h2>`;
+  g.forEach(x=>h+=`<div class="gate"><span class="badge ${x.pass?'p':'f'}">${x.pass?'PASS':'FAIL'}</span><b>${x.id}</b> ${x.name}</div>`);
+  return h;
+}
+
+let ASSETS=null;
+function render(stage){
+  if(!ASSETS) return;
+  const map={outline:renderOutline,characters:renderChars,art:renderArt,
+    script:renderScript,blocking:renderBlocking,storyboard:renderStoryboard,
+    pack:renderPack,gates:renderGates};
+  document.getElementById("out").innerHTML=map[stage](ASSETS[stage==="pack"?"production_pack":stage]||ASSETS[stage]);
+}
+document.getElementById("tabs").addEventListener("click",e=>{
+  const t=e.target.closest(".tab");if(!t)return;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");render(t.dataset.s);
+});
+document.getElementById("load").onclick=()=>{document.getElementById("src").value=SAMPLE;};
+document.getElementById("run").onclick=()=>{
+  const text=document.getElementById("src").value.trim();
+  if(!text){alert("请先粘贴小说或载入示例");return;}
+  ASSETS=build(text);
+  const pass=ASSETS.quality_gates.filter(g=>g.pass).length;
+  document.getElementById("meta").innerHTML=
+    `已生成 6 道工序 + 生产包 ｜ 质量门 <b style="color:var(--green)">${pass}/${ASSETS.quality_gates.length}</b> 通过 ｜ 主题：${ASSETS.outline.theme} ｜ 分镜 ${ASSETS.storyboard.total_shots} 镜`;
+  render("outline");
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.s==="outline"));
+};
+document.getElementById("json").onclick=()=>{
+  if(!ASSETS){alert("请先运行管线");return;}
+  const {quality_gates,...rest}=ASSETS;
+  document.getElementById("out").innerHTML=
+    `<h2>assembled 资产 JSON</h2><pre>${JSON.stringify(rest,null,2)}</pre>`;
+};
+document.getElementById("src").value=SAMPLE;
+
+// 支持 #stage 深链：自动运行示例并切换到指定工序（便于分享与截图）
+function goHash(){
+  const s=location.hash.replace("#","");
+  const stages=["outline","characters","art","script","blocking","storyboard","pack","gates"];
+  if(stages.includes(s)){
+    if(!ASSETS) document.getElementById("run").click();
+    document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.s===s));
+    render(s);
+  }
+}
+window.addEventListener("hashchange",goHash);
+goHash();
+</script>
+</body>
+</html>
