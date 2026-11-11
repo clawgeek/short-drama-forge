@@ -1,0 +1,85 @@
+{
+  "storyboard": [
+    {
+      "shot": 1,
+      "scene": "S1 檐下",
+      "shot_size": "CU",
+      "visual": "雨。阿砚蹲檐下修断骨纸鸢。｜阿砚特写",
+      "audio": "（喃喃）母亲说，飞得越高，越能替地上的人看一眼亲人。",
+      "duration_s": 4,
+      "anchor_ref": "阿砚",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 2,
+      "scene": "S2 巷口",
+      "shot_size": "CU",
+      "visual": "沈娘撑伞而来，递药。｜沈娘特写",
+      "audio": "你父亲咳得厉害，今夜怕是熬不过去。",
+      "duration_s": 4,
+      "anchor_ref": "沈娘",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 3,
+      "scene": "S2 巷口",
+      "shot_size": "MS",
+      "visual": "沈娘撑伞而来，递药。｜阿砚特写",
+      "audio": "（手停）这骨……又断了。",
+      "duration_s": 4,
+      "anchor_ref": "阿砚",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 4,
+      "scene": "S3 礁石",
+      "shot_size": "CU",
+      "visual": "老鲛如枯木静坐，开价。｜老鲛特写",
+      "audio": "把纸鸢放上天，沉船国便还你十年前沉没的人。",
+      "duration_s": 4,
+      "anchor_ref": "老鲛",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 5,
+      "scene": "S3 礁石",
+      "shot_size": "MS",
+      "visual": "老鲛如枯木静坐，开价。｜阿砚特写",
+      "audio": "我不信。",
+      "duration_s": 4,
+      "anchor_ref": "阿砚",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 6,
+      "scene": "S4 崖顶",
+      "shot_size": "CU",
+      "visual": "蓝火燃起，纸鸢升空，灯灭。｜老鲛特写",
+      "audio": "沉船国从不白送人回去，它只收走活人的念想。",
+      "duration_s": 4,
+      "anchor_ref": "老鲛",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 7,
+      "scene": "S4 崖顶",
+      "shot_size": "MS",
+      "visual": "蓝火燃起，纸鸢升空，灯灭。｜沈娘特写",
+      "audio": "（扑过去）他还在，他还在！",
+      "duration_s": 4,
+      "anchor_ref": "沈娘",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    },
+    {
+      "shot": 8,
+      "scene": "S4 崖顶",
+      "shot_size": "MS",
+      "visual": "蓝火燃起，纸鸢升空，灯灭。｜阿砚特写",
+      "audio": "（望空线）有些风筝放出去，就再也收不回了。",
+      "duration_s": 4,
+      "anchor_ref": "阿砚",
+      "style_ref": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀"
+    }
+  ],
+  "total_shots": 8
+}
