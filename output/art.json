@@ -1,0 +1,38 @@
+{
+  "visual_style": "湿润东方水墨 + 低饱和冷调，雨雾质感，蓝火点缀",
+  "color_palette": [
+    "#1f2d33",
+    "#2f6b66",
+    "#3a4a5a",
+    "#c9b48a",
+    "#e8e2d4"
+  ],
+  "scenes": [
+    "檐下修鸢",
+    "巷口送药",
+    "礁石枯坐",
+    "崖顶蓝火",
+    "空线望天"
+  ],
+  "costume_props": [
+    "油纸伞",
+    "竹骨纸鸢",
+    "蓝火堆",
+    "药包",
+    "枯木礁石"
+  ],
+  "anchor_lock": [
+    {
+      "character": "阿砚",
+      "locked_to": "anchor_image_prompt"
+    },
+    {
+      "character": "沈娘",
+      "locked_to": "anchor_image_prompt"
+    },
+    {
+      "character": "老鲛",
+      "locked_to": "anchor_image_prompt"
+    }
+  ]
+}
