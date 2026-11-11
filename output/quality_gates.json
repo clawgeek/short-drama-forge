@@ -1,0 +1,50 @@
+[
+  {
+    "id": "G01",
+    "name": "主角锚图含『正面全身』描述",
+    "pass": true,
+    "message": "全部主角锚图已锁定正面全身"
+  },
+  {
+    "id": "G02",
+    "name": "衍生视角声明『仅参考锚图』",
+    "pass": true,
+    "message": "跨镜头一致性约束已写入"
+  },
+  {
+    "id": "G03",
+    "name": "角色画像含原文逐字引用",
+    "pass": true,
+    "message": "已附原文逐字引用"
+  },
+  {
+    "id": "G04",
+    "name": "剧本场景数 ≥ 3 且含冲突推进",
+    "pass": true,
+    "message": "共 4 个场景"
+  },
+  {
+    "id": "G05",
+    "name": "分镜每个镜头引用角色锚点",
+    "pass": true,
+    "message": "共 8 个镜头全部引用锚点"
+  },
+  {
+    "id": "G06",
+    "name": "生产包 prompt 含视觉风格",
+    "pass": true,
+    "message": "共 8 条 production-ready prompt"
+  },
+  {
+    "id": "G07",
+    "name": "美术设定锁定全部角色锚点",
+    "pass": true,
+    "message": "anchor_lock 与角色表一一对应"
+  },
+  {
+    "id": "G08",
+    "name": "六道工序 + 生产包 JSON 字段完整",
+    "pass": true,
+    "message": "交接文件齐备"
+  }
+]
